@@ -57,7 +57,7 @@ class lineODSS:
    geometry={}
    units="km"
    switch="N"
-   Yprim=np.zeros(6,dtype=complex)
+   Yprim=[]
    def __init__(self) -> None:
        pass
 
