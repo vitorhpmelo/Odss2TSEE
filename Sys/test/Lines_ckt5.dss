@@ -1,0 +1,8 @@
+
+
+
+New Line.THR201_connector              bus1=_THR_SUB_1_LSB                 bus2=THR201                         length=0.001       r1=0.001                                                  r0=0.001 x1=0.01       x0=0.01  c1=0 c0=0 units=km enabled=False phases=3 
+New Line.MDV202_connector              bus1=_MDV_SUB_2_LSB                 bus2=MDV202                         length=0.001       r1=0.001                                                  r0=0.001 x1=0.01       x0=0.01  c1=0 c0=0 units=km enabled=False phases=3 
+New Line.MDV201_connector              bus1=_MDV_SUB_1_LSB                 bus2=MDV201                         length=0.001       r1=0.001                                                  r0=0.001 x1=0.01       x0=0.01  c1=0 c0=0 units=km enabled=True  phases=3 
+New Line.PIT201_connector              bus1=_PIT_SUB_1_LSB                 bus2=PIT201                         length=0.001       r1=0.001                                                  r0=0.001 x1=0.01       x0=0.01  c1=0 c0=0 units=km enabled=False phases=3 
+New Line.C_1P029_sw                    bus1=1160456.1                      bus2=MDV201_8107ELB_INT.1           length=1           switch=y                                                  units=km enabled=True  phases=1 
