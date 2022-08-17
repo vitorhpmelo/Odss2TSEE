@@ -48,6 +48,10 @@ class lineODSS:
    phases="3"
    bus1="xx"
    bus2="xx"
+   phbus1=''
+   flagTNbus1=0
+   phbus2=''
+   flagTNbus2=0
    length=0
    phase="" 
    enabled=True
@@ -61,3 +65,13 @@ class lineODSS:
    def __init__(self) -> None:
        pass
 
+class LoadOdss:
+    name="xx"
+    phases=3
+    bus1="xx"
+    phbus1='xx'
+    flagTNbus1=0
+    kv=-9999.
+    kw=-9999.
+    pf=0.95
+    con="Yg"

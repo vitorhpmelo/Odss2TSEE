@@ -1,3 +1,4 @@
+#%%
 from objects import *
 
 
@@ -65,10 +66,10 @@ def readLines(md,sys,linefile):
 
     lines=[]
     i=0
-    while (data.find("NEW LINE") != -1):
+    while (data.find("NEW LINE.") != -1):
         #find the beginin of the information about one line
-        bgline=data.find("NEW LINE")
-        endline=data[bgline+1:].find("NEW LINE")+bgline+1
+        bgline=data.find("NEW LINE.")
+        endline=data[bgline+1:].find("NEW LINE.")+bgline+1
 
         if (bgline==endline):
             endline=len(data)
@@ -78,8 +79,8 @@ def readLines(md,sys,linefile):
         # find the line name
 
         line.name=getfield_obg('name',thisline)
-        line.bus1=getfield_obg('bus1',thisline)
-        line.bus2=getfield_obg('bus2',thisline)
+        [line.phbus1,line.bus1,line.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
+        [line.phbus2,line.bus2,line.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
         line.length=float(getfield_obg('length',thisline))
         line.units=getfield_obg('units',thisline).lower()
         line.phases=int(getfield_opt('phases',thisline))
@@ -98,6 +99,50 @@ def readLines(md,sys,linefile):
     
     file.close()      
     return lines        
+
+
+def readLoads(md,sys,loadfile):
+    """
+    Function to read the Odss file with the information about the lines of the system to be converted
+    @param: md: string with the folder with the information about the systems
+    @param: sys: string with the name of the System which the files will be converted
+    @param: linefile: string with the name of the file with the information of the Lines
+    @return lines: list of objects with the information of the lines
+    """
+    
+    file=open(md+'/'+sys+'/'+loadfile,'r')
+    data=file.read()
+    data=data.upper()
+
+    loads=[]
+    i=0
+    while (data.find("NEW LOAD.") != -1):
+        #find the beginin of the information about one line
+        bgline=data.find("NEW LOAD.")
+        endline=data[bgline+1:].find("NEW LOAD.")+bgline+1
+
+        if (bgline==endline):
+            endline=len(data)
+
+        thisline=data[bgline:endline]
+        load=LoadOdss()
+        # find the line name
+
+        load.name=getfield_obg('name',thisline)
+        [load.phbus1,load.bus1,load.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
+        load.phases=int(getfield_opt('phases',thisline))
+        load.kv=float(getfield_opt('kv',thisline))
+        load.kw=float(getfield_opt('kw',thisline))
+        load.pf=float(getfield_opt('pf',thisline))
+
+        data=data[endline:]
+        i=i+1
+        loads.append(load)
+    
+    file.close()      
+    return loads   
+
+
 
 #reads obrigatory files 
 def getfield_obg(field,linedata):
@@ -140,3 +185,32 @@ def getfield_opt(field,linedata):
 
 
 
+def definephasesbus(bus):
+    """
+    Funtion to extract the information into the bus name string
+    @param: bus: string with the bus information like in opendss
+    @return: phases: string with the pahses code
+    @return: flagTN: binary number to check if ground and neutral are present (0 none; 1 Neutral; 2 ground ; both)
+    """
+    i=bus.find('.')
+    flagTN=0b000
+    phases=''
+    if i==-1:
+       name=bus
+       phases='ABC'
+       return name,phases
+    else:
+       name=bus[0:i]
+       ph=bus[i:]
+       
+       phases += 'A' if '1' in ph else phases # se tem '1' a fase a está presente
+       phases += 'B' if '2' in ph else phases # se tem '2' a fase b está presente
+       phases += 'C' if '3' in ph else phases # se tem '3 a fase c está presente
+       flagTN+=0b01 if '4' in ph else flagTN # se tem '4' possui neutro
+       flagTN+=0b10 if '0' in ph else flagTN # se tem '0' possui neutro aterrado
+    return phases,flagTN,name    
+
+
+
+
+# %%

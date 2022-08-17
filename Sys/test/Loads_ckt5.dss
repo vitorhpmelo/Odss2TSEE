@@ -1,0 +1,29 @@
+
+
+New Linecode.defaultSecondary nphases=1 rmatrix=0.25  xmatrix=0.076 cmatrix=3 units=kft
+
+New Line.S_MDV201_1144260FUSE-1B0  bus1=X_1144260.2  bus2=X_1144260_1.2  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_1144260FUSE-1B0  phases=1  bus1=X_1144260_1.2  kv=0.24  kW=6.381454  pf=0.934155012608757  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=25
+New Line.S_MDV201_HN_2_461_C62251-1C0  bus1=X_62251.3  bus2=X_62251_1.3  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_461_C62251-1C0  phases=1  bus1=X_62251_1.3  kv=0.24  kW=3.86385  pf=0.93002958168504  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.3333333333333
+New Line.S_MDV201_HN_2_461_C62251-1C1  bus1=X_62251.3  bus2=X_62251_2.3  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_461_C62251-1C1  phases=1  bus1=X_62251_2.3  kv=0.24  kW=3.86385  pf=0.93002958168504  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.3333333333333
+New Line.S_MDV201_HN_2_461_C62251-1C2  bus1=X_62251.3  bus2=X_62251_3.3  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_461_C62251-1C2  phases=1  bus1=X_62251_3.3  kv=0.24  kW=3.86385  pf=0.93002958168504  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.3333333333333
+New Line.S_MDV201_6569ELB-1B0  bus1=X_6569.2  bus2=X_6569_1.2  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_6569ELB-1B0  phases=1  bus1=X_6569_1.2  kv=0.24  kW=7.802753  pf=0.934154989242921  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.3333333333333
+New Line.S_MDV201_6569ELB-1B1  bus1=X_6569.2  bus2=X_6569_2.2  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_6569ELB-1B1  phases=1  bus1=X_6569_2.2  kv=0.24  kW=7.802753  pf=0.934154989242921  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.3333333333333
+New Line.S_MDV201_6569ELB-1B2  bus1=X_6569.2  bus2=X_6569_3.2  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_6569ELB-1B2  phases=1  bus1=X_6569_3.2  kv=0.24  kW=7.802753  pf=0.934154989242921  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.3333333333333
+New Line.S_MDV201_HN_2_464_C62232-1C0  bus1=X_62232.3  bus2=X_62232_1.3  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_464_C62232-1C0  phases=1  bus1=X_62232_1.3  kv=0.24  kW=6.567842  pf=0.930029584365006  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.5
+New Line.S_MDV201_HN_2_464_C62232-1C1  bus1=X_62232.3  bus2=X_62232_2.3  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_464_C62232-1C1  phases=1  bus1=X_62232_2.3  kv=0.24  kW=6.567842  pf=0.930029584365006  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=12.5
+New Line.S_MDV201_HN_2_849_B94730-1B0  bus1=X_94730.2  bus2=X_94730_1.2  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_849_B94730-1B0  phases=1  bus1=X_94730_1.2  kv=0.24  kW=2.73706266666667  pf=0.934154979245437  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=8.33333333333333
+New Line.S_MDV201_HN_2_849_B94730-1B1  bus1=X_94730.2  bus2=X_94730_2.2  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_849_B94730-1B1  phases=1  bus1=X_94730_2.2  kv=0.24  kW=2.73706266666667  pf=0.934154979245437  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=8.33333333333333
+New Line.S_MDV201_HN_2_849_B94730-1B2  bus1=X_94730.2  bus2=X_94730_3.2  linecode=defaultSecondary  phases=1  length=100  units=ft
+New Load.MDV201_HN_2_849_B94730-1B2  phases=1  bus1=X_94730_3.2  kv=0.24  kW=2.73706266666667  pf=0.934154979245437  status=variable model=4 CVRwatts=0.8 CVRvars=3 Class=1 yearly=Residential   conn=wye   !xfkVA=8.33333333333333
+New Line.S_MDV201_HN_2_683_A39601-1A0  bus1=X_39601.1  bus2=X_39601_1.1  linecode=defaultSecondary  phases=1  length=100  units=ft
