@@ -75,3 +75,23 @@ class LoadOdss:
     kw=-9999.
     pf=0.95
     con="Yg"
+
+class TrafoOdss:
+    name="xx"
+    phases=3
+    windings=2
+    bus1="xxx"
+    bus2="xxx"
+    Connbus1="YG"
+    Connbus2="YG"    
+    kvbus1="xxx"
+    kvbus2="xxx"
+    Tapbus1=1
+    Tapbus2=1
+    rneubus1=0
+    rneubus2=0
+    XHL=0.00
+    Loadloss=0.0
+    Noloadloss=0.0
+    imag=0.0
+    

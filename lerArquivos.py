@@ -163,6 +163,18 @@ def getfield_obg(field,linedata):
     return name
 
 
+def getfield_2(field,linedata):
+    """Function that reads obrigatory fields in the Odss file
+    @param field: string with the name of the field to be read
+    @param linedata: string with the data from the actual line
+    """
+
+    field=field.upper()+"="
+    linedata=linedata[linedata.find(field)+len(field):linedata.find(')')]
+    linedata=linedata.strip(' ')
+
+    return [field1,field2]
+
 def getfield_opt(field,linedata):
     """Function that reads optional fields in the Odss file
     @param field: string with the name of the field to be read
@@ -211,6 +223,52 @@ def definephasesbus(bus):
     return phases,flagTN,name    
 
 
+def readTrafo(md,sys,trafofiles):
+    """
+    Function to read the Odss file with the information about the lines of the system to be converted
+    @param: md: string with the folder with the information about the systems
+    @param: sys: string with the name of the System which the files will be converted
+    @param: linefile: string with the name of the file with the information of the Lines
+    @return lines: list of objects with the information of the lines
+    """
+    
+    file=open(md+'/'+sys+'/'+trafofiles,'r')
+    data=file.read()
+    data=data.upper()
 
+    trafos=[]
+    while (data.find("NEW TRANSFORMER.") != -1):
+        #find the beginin of the information about one line
+        bgline=data.find("NEW TRANSFORMER.")
+        endline=data[bgline+1:].find("NEW")+bgline+1
 
-# %%
+        if (bgline==endline):
+            endline=len(data)
+
+        thisline=data[bgline:endline]
+        trafo=TrafoOdss()
+        # find the line name
+
+        
+        if (thisline.find('BUSES')==-1) :
+
+#        [line.phbus1,line.bus1,line.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
+#        [line.phbus2,line.bus2,line.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
+#        line.length=float(getfield_obg('length',thisline))
+#        line.units=getfield_obg('units',thisline).lower()
+#        line.phases=int(getfield_opt('phases',thisline))
+#        line.enabled=getfield_opt('enabled',thisline)
+#        line.geometryflag= 'GEOMETRY' in thisline
+#        line.linecodeflag= 'LINECODE' in thisline
+#        line.switch=getfield_opt('switch',thisline)
+#        if line.geometryflag == True:
+#            line.geometry=getfield_opt('GEOMETRY',thisline)
+#        elif line.linecodeflag ==True:
+#            line.geometry=getfield_opt('LINECODE',thisline)
+#
+#        data=data[endline:]
+#        i=i+1
+#        lines.append(line)
+    
+    file.close()      
+    return lines    
