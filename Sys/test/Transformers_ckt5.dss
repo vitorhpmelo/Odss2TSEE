@@ -1,0 +1,8 @@
+
+
+New Reactor.MDV_SUB_1_HSB  bus1=SourceBus  bus2=MDV_SUB_1_HSB  r=0  x=(1.4255 1.0871 0.001 3 * - - 115 12.47 / sqr *)
+~ normamps=1000 emergamps=2000
+New Transformer.MDV_SUB_1  phases=3  windings=2  buses=(MDV_SUB_1_HSB, _MDV_SUB_1_LSB.1.2.3.0)  conns=(delta wye)  kvs=(115, 12.47)  kvas=(10000, 10000)  xhl=(1.0871 0.001 3 * - 10000 1000 / * 12.47 sqr / 100 *)  sub=y  subname=MDV_SUB_1
+~ wdg=1  %r=(0.103 10000 1000 / * 12.47 sqr / 2 / 100 *)
+~ wdg=2  %r=(0.103 10000 1000 / * 12.47 sqr / 2 / 100 *)
+New Transformer.MDV201_1144260FUSE-1B  phases=1  wdg=1 bus=1144260.2  kv=7.19955785679463  kVA=25  wdg=2 bus=X_1144260.2  kv=0.24  kVA=25  %imag=0.5  %loadloss=1.5  %noloadloss=.25  XHL=2

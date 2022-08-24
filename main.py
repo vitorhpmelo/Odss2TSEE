@@ -20,7 +20,9 @@ yprimfile="ckt5_EXP_YPRIM.CSV"
 
 dic_lines=readYprim(md,sys,yprimfile)
 
-trafo_files=""
+trafo_files="Transformers_ckt5.dss"
+
+trafos=readTrafo(md,sys,trafo_files)
 
 # %%
 
@@ -32,4 +34,6 @@ for i in range(len(lines)):
 
 loadfile="Loads_ckt5.dss"
 loads=readLoads(md,sys,loadfile)
-# %%
+
+
+

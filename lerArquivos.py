@@ -79,8 +79,8 @@ def readLines(md,sys,linefile):
         # find the line name
 
         line.name=getfield_obg('name',thisline)
-        [line.phbus1,line.bus1,line.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
-        [line.phbus2,line.bus2,line.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
+        [line.bus1,line.phbus1,line.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
+        [line.bus2,line.phbus2,line.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
         line.length=float(getfield_obg('length',thisline))
         line.units=getfield_obg('units',thisline).lower()
         line.phases=int(getfield_opt('phases',thisline))
@@ -170,9 +170,16 @@ def getfield_2(field,linedata):
     """
 
     field=field.upper()+"="
-    linedata=linedata[linedata.find(field)+len(field):linedata.find(')')]
-    linedata=linedata.strip(' ')
+    beg=linedata.find(field)+len(field)
+    end=linedata[beg:].find(")")
+    linedata=linedata[beg:beg+end]
+    if linedata.find(",")!=-1:
+        linedata=linedata.split(",")
+    else:
+        linedata=linedata.split(" ")    
 
+    field1=(linedata[0].replace(")","")).replace("(","").strip(' ')
+    field2=(linedata[1].replace(")","")).replace("(","").strip(' ')
     return [field1,field2]
 
 def getfield_opt(field,linedata):
@@ -210,18 +217,36 @@ def definephasesbus(bus):
     if i==-1:
        name=bus
        phases='ABC'
-       return name,phases
+       return name,phases,flagTN
     else:
        name=bus[0:i]
        ph=bus[i:]
        
-       phases += 'A' if '1' in ph else phases # se tem '1' a fase a está presente
-       phases += 'B' if '2' in ph else phases # se tem '2' a fase b está presente
-       phases += 'C' if '3' in ph else phases # se tem '3 a fase c está presente
+       phases += 'A' if '1' in ph else '' # se tem '1' a fase a está presente
+       phases += 'B' if '2' in ph else '' # se tem '2' a fase b está presente
+       phases += 'C' if '3' in ph else '' # se tem '3 a fase c está presente
        flagTN+=0b01 if '4' in ph else flagTN # se tem '4' possui neutro
        flagTN+=0b10 if '0' in ph else flagTN # se tem '0' possui neutro aterrado
-    return phases,flagTN,name    
+    return name,phases,flagTN    
 
+
+def defineconn(conn,flagTN):
+    """
+    Funtion to extract the connectio information
+    @param: conn: string with the conn information like in opendss
+    @param: flagTN: bool to tell if the bus is grounded
+    @return: res: the connection normalized string (Yg,D,Y)
+    """
+    res=''
+    if conn == -1:
+        res='Yg'
+    elif conn.upper()=='DELTA' or conn.upper()=='D':
+        res='D'
+    else:
+        res="Y"
+        if (flagTN==0):
+            res=res+'g'
+    return res     
 
 def readTrafo(md,sys,trafofiles):
     """
@@ -248,27 +273,36 @@ def readTrafo(md,sys,trafofiles):
         thisline=data[bgline:endline]
         trafo=TrafoOdss()
         # find the line name
-
         
-        if (thisline.find('BUSES')==-1) :
-
-#        [line.phbus1,line.bus1,line.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
-#        [line.phbus2,line.bus2,line.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
-#        line.length=float(getfield_obg('length',thisline))
-#        line.units=getfield_obg('units',thisline).lower()
-#        line.phases=int(getfield_opt('phases',thisline))
-#        line.enabled=getfield_opt('enabled',thisline)
-#        line.geometryflag= 'GEOMETRY' in thisline
-#        line.linecodeflag= 'LINECODE' in thisline
-#        line.switch=getfield_opt('switch',thisline)
-#        if line.geometryflag == True:
-#            line.geometry=getfield_opt('GEOMETRY',thisline)
-#        elif line.linecodeflag ==True:
-#            line.geometry=getfield_opt('LINECODE',thisline)
-#
-#        data=data[endline:]
-#        i=i+1
-#        lines.append(line)
+        trafo.phases = int(getfield_obg('phases',thisline))
+        
+        if  (thisline.find('BUSES')!=-1):
+            [bus1info,bus2info]=getfield_2('BUSES',thisline)
+            [trafo.bus1,trafo.phbus1,trafo.flagTNbus1]=definephasesbus(bus1info)
+            [trafo.bus2,trafo.phbus2,trafo.flagTNbus2]=definephasesbus(bus2info)
+        else:
+            [trafo.bus1,trafo.phbus1,trafo.flagTNbus1]=definephasesbus(getfield_obg('bus',thisline))
+            [trafo.bus2,trafo.phbus2,trafo.flagTNbus2]=definephasesbus(getfield_obg('bus',thisline[thisline.find('BUS')+1:]))
+        if (thisline.find('KVS')!=-1):
+            [trafo.kvbus1,trafo.kvbus2]=getfield_2('kvs',thisline)
+        else:
+            trafo.kvbus1=getfield_opt('kv',thisline)
+            trafo.kvbus2=getfield_opt('kv',thisline[thisline.find('KV')+1:])
+        if (thisline.find('CONNS')!=-1):
+            Connbus1,Connbus2=getfield_2('conns',thisline)
+            trafo.Connbus1=defineconn(Connbus1,trafo.flagTNbus1)
+            trafo.Connbus2=defineconn(Connbus2,trafo.flagTNbus1)
+        else:
+            trafo.Connbus1=defineconn(getfield_opt('conn',thisline),trafo.flagTNbus1)
+            trafo.Connbus2=defineconn(getfield_opt('conn',thisline[thisline.find('CONN')+1:]),trafo.flagTNbus1)
+        if (thisline.find('KVAS')!=-1):
+            [trafo.kvasbus1,trafo.kvasbus2]=getfield_2('kvas',thisline)
+        else:
+            trafo.kvasbus1=getfield_opt('kva',thisline)
+            trafo.kvasbus2=getfield_opt('kva',thisline[thisline.find('KVA')+1:])
+            
+        data=data[endline:]
+        trafos.append(trafo)
     
     file.close()      
-    return lines    
+    return trafos    

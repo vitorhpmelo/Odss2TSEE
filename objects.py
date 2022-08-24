@@ -82,6 +82,12 @@ class TrafoOdss:
     windings=2
     bus1="xxx"
     bus2="xxx"
+    phbus1=''
+    kvasbus1=''
+    flagTNbus1=0
+    phbus2=''
+    kvasbus2=''
+    flagTNbus2=0
     Connbus1="YG"
     Connbus2="YG"    
     kvbus1="xxx"
