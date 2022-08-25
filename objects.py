@@ -96,6 +96,9 @@ class TrafoOdss:
     Tapbus2=1
     rneubus1=0
     rneubus2=0
+    r1=0.00
+    r2=0.00
+    r=-1
     XHL=0.00
     Loadloss=0.0
     Noloadloss=0.0

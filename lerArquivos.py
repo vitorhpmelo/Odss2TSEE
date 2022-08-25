@@ -1,6 +1,6 @@
-#%%
-from objects import *
 
+from objects import *
+import re 
 
 def readYprim(md,sys,yprimfile):
     """
@@ -300,9 +300,120 @@ def readTrafo(md,sys,trafofiles):
         else:
             trafo.kvasbus1=getfield_opt('kva',thisline)
             trafo.kvasbus2=getfield_opt('kva',thisline[thisline.find('KVA')+1:])
-            
+        if (thisline.find('R=')!=-1):
+            [Rwdg1,Rwdg2,Rwdg]=getRwdg(thisline)
+            trafo.r1=Rwdg1
+            trafo.r2=Rwdg2
+            trafo.r=Rwdg
+        if (thisline.find('XHL=')!=-1):
+            trafo.XHL=getXHL(thisline)
+        trafo.imag=float(getfield_opt('imag',thisline))
+        trafo.Loadloss=float(getfield_opt('loadloss',thisline))
+        trafo.Noloadloss=float(getfield_opt('loadloss',thisline))
         data=data[endline:]
         trafos.append(trafo)
     
     file.close()      
     return trafos    
+
+
+def getXHL(field):
+
+    beg=0
+    beg=field[beg:].find("XHL=")
+    endr=field[beg+4:].find('=') + beg
+
+    if endr < beg:
+        endr=-1
+    if field[beg:endr].find(')') != -1:
+        if endr==-1:
+            aux=field[beg:]
+        else:
+            aux=field[beg:endr]    
+        aux=aux[aux.find('('):aux.find(')')+1]
+        aux=aux.replace("SQR","**2")
+        aux=re.sub(r'(\d) (\d)',r'\1*\2',aux)
+        aux=aux.replace(" ",'')
+        aux=aux.replace("/*","/")
+        aux=aux.replace("*)",")")
+        value=eval(aux)
+    else:
+        if endr==-1:
+            value=field[beg:]
+        else:
+            value=field[beg:endr]    
+        
+        value=re.sub('[^0-9.]','', value)
+
+    return float(value)
+
+def getRwdg(field):
+    nRs=0
+    Rwdg1=-1
+    Rwdg2=-1 
+    Rwdg=-1
+    beg=0
+    endr=0
+    while (field[beg:].find("R=")!=-1):
+        beg=beg+field[beg:].find("R=")
+        nRs=nRs+1
+        nWDG1=field[:beg].find("WDG=1")
+        nWDG2=field[:beg].find("WDG=2")
+        endr=field[beg+2:].find('=') + beg
+        if endr < beg:
+            endr=-1
+        if nWDG1>nWDG2:
+        ## the data is from wdg1
+            if field[beg:endr].find(')') != -1:
+                if endr==-1:
+                    aux=field[beg:]
+                else:
+                    aux=field[beg:endr]    
+                aux=aux[aux.find('('):aux.find(')')+1]
+                aux=aux.replace("SQR","**2")
+                aux=re.sub(r'(\d) (\d)',r'\1*\2',aux)
+                aux=aux.replace(" ",'')
+                aux=aux.replace("/*","/")
+                aux=aux.replace("*)",")")
+                value=eval(aux)
+            else:
+                value=field[beg:endr]
+                value=re.sub('[^0-9.]','', value)
+            Rwdg1=float(value)
+        elif nWDG1<nWDG2:
+            if field[beg:endr].find(')') != -1:
+                if endr==-1:
+                    aux=field[beg:]
+                else:
+                    aux=field[beg:endr]    
+                aux=aux[aux.find('('):aux.find(')')+1]
+                aux=aux.replace("SQR","**2")
+                aux=re.sub(r'(\d) (\d)',r'\1*\2',aux)
+                aux=aux.replace(" ",'')
+                aux=aux.replace("/*","/")
+                aux=aux.replace("*)",")")
+                value=eval(aux)
+            else:
+                value=field[beg:endr].find(')')
+                value=re.sub('[^0-9.]','', value)
+            Rwdg2=float(value)
+        else:
+            if field[beg:endr].find(')') != -1:
+                if endr==-1:
+                    aux=field[beg:]
+                else:
+                    aux=field[beg:endr]   
+                aux=aux[aux.find('('):aux.find(')')+1]
+                aux=aux.replace("SQR","**2")
+                aux=re.sub(r'(\d) (\d)',r'\1*\2',aux)
+                aux=aux.replace(" ",'')
+                aux=aux.replace("/*","/")
+                aux=aux.replace("*)",")")
+                value=eval(aux)
+                value=eval(aux)
+            else:
+                value=field[beg:endr]
+                value=re.sub('[^0-9.]','', value)
+            Rwdg=float(value)
+        beg=endr    
+    return [Rwdg1,Rwdg2,Rwdg]
