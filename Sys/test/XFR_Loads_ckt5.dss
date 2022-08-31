@@ -1,0 +1,4 @@
+New Transformer.MDV201_1144260FUSE-1B  phases=1  wdg=1 bus=1144260.2  kv=7.19955785679463  kVA=25  wdg=2 bus=X_1144260.2  kv=0.24  kVA=25  %imag=0.5  %loadloss=1.5  %noloadloss=.25  XHL=2
+New Transformer.MDV201_HN_2_461_C62251-1C  phases=1  wdg=1 bus=62251.3  kv=7.19955785679463  kVA=37.5   wdg=2 bus=X_62251.3  kv=0.24  kVA=37.5  %imag=0.5  %loadloss=1.4  %noloadloss=.25  XHL=2
+New Transformer.MDV201_6569ELB-1B  phases=1  wdg=1 bus=6569.2  kv=7.19955785679463  kVA=37.5   wdg=2 bus=X_6569.2  kv=0.24  kVA=37.5  %imag=0.5  %loadloss=1.4  %noloadloss=.25  XHL=2
+New Transformer.MDV201_HN_2_464_C62232-1C  phases=1  wdg=1 bus=62232.3  kv=7.19955785679463  kVA=25  wdg=2 bus=X_62232.3  kv=0.24  kVA=25  %imag=0.5  %loadloss=1.5  %noloadloss=.25  XHL=2

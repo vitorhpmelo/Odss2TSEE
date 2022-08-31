@@ -64,6 +64,8 @@ def readLines(md,sys,linefile):
     data=file.read()
     data=data.upper()
 
+    buses={}
+
     lines=[]
     i=0
     while (data.find("NEW LINE.") != -1):
@@ -81,6 +83,17 @@ def readLines(md,sys,linefile):
         line.name=getfield_obg('name',thisline)
         [line.bus1,line.phbus1,line.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
         [line.bus2,line.phbus2,line.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
+        
+        if line.bus1 in buses.keys():
+            buses[line.bus1]="".join(dict.fromkeys(buses[line.bus1]+line.phbus1))
+        else:
+            buses[line.bus1]=line.phbus1
+        
+        if line.bus2 in buses.keys():
+            buses[line.bus2]="".join(dict.fromkeys(buses[line.bus2]+line.phbus2))
+        else:
+            buses[line.bus2]=line.phbus2
+
         line.length=float(getfield_obg('length',thisline))
         line.units=getfield_obg('units',thisline).lower()
         line.phases=int(getfield_opt('phases',thisline))
@@ -96,9 +109,9 @@ def readLines(md,sys,linefile):
         data=data[endline:]
         i=i+1
         lines.append(line)
-    
+
     file.close()      
-    return lines        
+    return lines,buses        
 
 
 def readLoads(md,sys,loadfile):
@@ -260,7 +273,7 @@ def readTrafo(md,sys,trafofiles):
     file=open(md+'/'+sys+'/'+trafofiles,'r')
     data=file.read()
     data=data.upper()
-
+    buses={}
     trafos=[]
     while (data.find("NEW TRANSFORMER.") != -1):
         #find the beginin of the information about one line
@@ -274,15 +287,33 @@ def readTrafo(md,sys,trafofiles):
         trafo=TrafoOdss()
         # find the line name
         
+        trafo.name = getfield_obg('name',thisline)
         trafo.phases = int(getfield_obg('phases',thisline))
+
         
         if  (thisline.find('BUSES')!=-1):
             [bus1info,bus2info]=getfield_2('BUSES',thisline)
             [trafo.bus1,trafo.phbus1,trafo.flagTNbus1]=definephasesbus(bus1info)
             [trafo.bus2,trafo.phbus2,trafo.flagTNbus2]=definephasesbus(bus2info)
+            if trafo.bus1 in buses.keys():
+                buses[trafo.bus1]="".join(dict.fromkeys(buses[trafo.bus1]+trafo.phbus1))
+            else:
+                buses[trafo.bus1]=trafo.phbus1
+            if trafo.bus2 in buses.keys():
+                buses[trafo.bus2]="".join(dict.fromkeys(buses[trafo.bus2]+trafo.phbus2))
+            else:
+                buses[trafo.bus2]=trafo.phbus2
         else:
             [trafo.bus1,trafo.phbus1,trafo.flagTNbus1]=definephasesbus(getfield_obg('bus',thisline))
             [trafo.bus2,trafo.phbus2,trafo.flagTNbus2]=definephasesbus(getfield_obg('bus',thisline[thisline.find('BUS')+1:]))
+            if trafo.bus1 in buses.keys():
+                buses[trafo.bus1]="".join(dict.fromkeys(buses[trafo.bus1]+trafo.phbus1))
+            else:
+                buses[trafo.bus1]=trafo.phbus1
+            if trafo.bus2 in buses.keys():
+                buses[trafo.bus2]="".join(dict.fromkeys(buses[trafo.bus2]+trafo.phbus2))
+            else:
+                buses[trafo.bus2]=trafo.phbus2
         if (thisline.find('KVS')!=-1):
             [trafo.kvbus1,trafo.kvbus2]=getfield_2('kvs',thisline)
         else:
@@ -309,12 +340,12 @@ def readTrafo(md,sys,trafofiles):
             trafo.XHL=getXHL(thisline)
         trafo.imag=float(getfield_opt('imag',thisline))
         trafo.Loadloss=float(getfield_opt('loadloss',thisline))
-        trafo.Noloadloss=float(getfield_opt('loadloss',thisline))
+        trafo.Noloadloss=float(getfield_opt('noloadloss',thisline))
         data=data[endline:]
         trafos.append(trafo)
     
     file.close()      
-    return trafos    
+    return trafos,buses    
 
 
 def getXHL(field):
