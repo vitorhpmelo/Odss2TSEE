@@ -142,7 +142,7 @@ def readLoads(md,sys,loadfile):
         # find the line name
 
         load.name=getfield_obg('name',thisline)
-        [load.phbus1,load.bus1,load.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
+        [load.bus1,load.phbus1,load.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
         load.phases=int(getfield_opt('phases',thisline))
         load.kv=float(getfield_opt('kv',thisline))
         load.kw=float(getfield_opt('kw',thisline))
@@ -448,3 +448,51 @@ def getRwdg(field):
             Rwdg=float(value)
         beg=endr    
     return [Rwdg1,Rwdg2,Rwdg]
+
+def readReactor(md,sys,reactorfile):
+    """
+    Function to read the Odss file with the information about the reactor of the system to be converted
+    @param: md: string with the folder with the information about the systems
+    @param: sys: string with the name of the System which the files will be converted
+    @param: reactorfile: string with the name of the file with the information of the reactor
+    @return reactor: list of objects with the information of the reactors
+    """
+    
+    file=open(md+'/'+sys+'/'+reactorfile,'r')
+    data=file.read()
+    data=data.upper()
+
+    buses={}
+
+    reactors=[]
+    i=0
+    while (data.find("NEW REACTOR.") != -1):
+        #find the beginin of the information about one line
+        bgline=data.find("NEW REACTOR.")
+        endline=data[bgline+1:].find("NEW")+bgline+1
+
+        if (bgline==endline):
+            endline=len(data)
+
+        thisline=data[bgline:endline]
+        reactor=ReactorOdss()
+        # find the line name
+
+        reactor.name=getfield_obg('name',thisline)
+        [reactor.bus1,reactor.phbus1,reactor.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
+        [reactor.bus2,reactor.phbus2,reactor.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
+        
+        if reactor.bus1 in buses.keys():
+            buses[reactor.bus1]="".join(dict.fromkeys(buses[reactor.bus1]+reactor.phbus1))
+        else:
+            buses[reactor.bus1]=reactor.phbus1
+        
+        if reactor.bus2 in buses.keys():
+            buses[reactor.bus2]="".join(dict.fromkeys(buses[reactor.bus2]+reactor.phbus2))
+        else:
+            buses[reactor.bus2]=reactor.phbus2 
+        data=data[endline:]
+        reactors.append(reactor)
+
+    file.close()      
+    return reactors,buses        

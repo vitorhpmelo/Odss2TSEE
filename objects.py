@@ -72,7 +72,7 @@ class LoadOdss:
     phbus1='xx'
     flagTNbus1=0
     kv=-9999.
-    kw=-9999.
+    kw=0.
     pf=0.95
     con="Yg"
 
@@ -104,3 +104,14 @@ class TrafoOdss:
     Noloadloss=0.0
     imag=0.0
     
+
+class ReactorOdss:
+    name="xx"
+    phases=3
+    bus1="xxx"
+    bus2="xxx"
+    phbus1=''
+    kvasbus1=''
+    flagTNbus1=0
+    phbus2=''
+    kvasbus2=''
