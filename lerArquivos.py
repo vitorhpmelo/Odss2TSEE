@@ -83,16 +83,7 @@ def readLines(md,sys,linefile):
         line.name=getfield_obg('name',thisline)
         [line.bus1,line.phbus1,line.flagTNbus1]=definephasesbus(getfield_obg('bus1',thisline))
         [line.bus2,line.phbus2,line.flagTNbus2]=definephasesbus(getfield_obg('bus2',thisline))
-        
-        if line.bus1 in buses.keys():
-            buses[line.bus1]="".join(dict.fromkeys(buses[line.bus1]+line.phbus1))
-        else:
-            buses[line.bus1]=line.phbus1
-        
-        if line.bus2 in buses.keys():
-            buses[line.bus2]="".join(dict.fromkeys(buses[line.bus2]+line.phbus2))
-        else:
-            buses[line.bus2]=line.phbus2
+
 
         line.length=float(getfield_obg('length',thisline))
         line.units=getfield_obg('units',thisline).lower()
@@ -108,7 +99,18 @@ def readLines(md,sys,linefile):
 
         data=data[endline:]
         i=i+1
-        lines.append(line)
+
+        if line.enabled != "FALSE": 
+            lines.append(line)   
+            if line.bus1 in buses.keys():
+                buses[line.bus1]="".join(dict.fromkeys(buses[line.bus1][0]+line.phbus1))
+            else:
+                buses[line.bus1]=line.phbus1
+            
+            if line.bus2 in buses.keys():
+                buses[line.bus2]="".join(dict.fromkeys(buses[line.bus2]+line.phbus2))
+            else:
+                buses[line.bus2]=line.phbus2
 
     file.close()      
     return lines,buses        
